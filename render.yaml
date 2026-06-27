@@ -39,19 +39,3 @@ services:
         sync: false
       - key: NEXT_PUBLIC_SITE_URL
         sync: false
-      - key: NEXT_PUBLIC_WHATSAPP_NUMBER
-        sync: false
-      - key: NEXT_PUBLIC_PHONE_DISPLAY
-        sync: false
-      - key: NEXT_PUBLIC_CONTACT_EMAIL
-        sync: false
-      - key: NEXT_PUBLIC_STORE_ADDRESS
-        sync: false
-      - key: NEXT_PUBLIC_STORE_MAP_QUERY
-        sync: false
-      - key: NEXT_PUBLIC_INSTAGRAM_URL
-        sync: false
-      - key: NEXT_PUBLIC_FACEBOOK_URL
-        sync: false
-      - key: NEXT_PUBLIC_X_URL
-        sync: false

@@ -83,20 +83,9 @@ http://localhost:3000/admin
 
 ## Replace Dummy Details
 
-All public details are in `frontend/.env.local` locally, or in the frontend service environment variables when deployed:
+The public contact and social values are currently hardcoded in `frontend/src/lib/constants.ts`. Update them there if you want to change the displayed phone, email, address, WhatsApp link, or social links. Only the API/site URLs remain env-driven.
 
-```dotenv
-NEXT_PUBLIC_WHATSAPP_NUMBER=919999999999
-NEXT_PUBLIC_PHONE_DISPLAY=+91 99999 99999
-NEXT_PUBLIC_CONTACT_EMAIL=hello@poojajewellers.example
-NEXT_PUBLIC_STORE_ADDRESS=Bijulia Talaab, Ramgarh, Jharkhand
-NEXT_PUBLIC_STORE_MAP_QUERY=Bijulia Talaab, Ramgarh, Jharkhand
-NEXT_PUBLIC_INSTAGRAM_URL=https://example.com/instagram
-NEXT_PUBLIC_FACEBOOK_URL=https://example.com/facebook
-NEXT_PUBLIC_X_URL=https://example.com/x
-```
-
-The placeholder social links are safe dummy destinations. Replace them with your exact profile/page URLs before advertising the site. Public `NEXT_PUBLIC_*` values are compiled into the frontend, so redeploy it after changing them.
+The placeholder social links are safe dummy destinations. Replace them with your exact profile/page URLs before advertising the site.
 
 ## Deploy on Render
 
@@ -107,7 +96,7 @@ The root `render.yaml` defines the frontend and API as two web services.
 3. In Render, choose **New > Blueprint**, connect the repository, and use `render.yaml`.
 4. Supply the prompted secrets and URLs:
    - API: `MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `FRONTEND_URL`
-   - Frontend: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_URL`, and public contact details
+   - Frontend: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_SITE_URL`
 5. After Render assigns URLs, set:
    - `FRONTEND_URL=https://<frontend-service>.onrender.com`
    - `NEXT_PUBLIC_API_URL=https://<api-service>.onrender.com/api`
