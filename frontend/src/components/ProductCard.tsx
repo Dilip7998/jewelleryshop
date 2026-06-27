@@ -60,7 +60,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
 
-        <div className="mt-4 flex items-end justify-between gap-3">
+        <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="text-sm text-ink/46 line-through">
               {formatCurrency(product.originalPrice)}
@@ -73,7 +73,7 @@ export function ProductCard({ product }: ProductCardProps) {
             href={productWhatsappUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-charcoal px-4 py-2 text-sm font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-charcoal px-4 py-2 text-sm font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal"
           >
             <MessageCircle size={16} aria-hidden="true" />
             Enquire

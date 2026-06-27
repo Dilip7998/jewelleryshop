@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { ContactMap } from "@/components/ContactMap";
 import { EnquiryForm } from "@/components/EnquiryForm";
-import { whatsappUrl, CONTACT_EMAIL, STORE_ADDRESS } from "@/lib/constants";
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  STORE_ADDRESS,
+  whatsappUrl
+} from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Contact Us",
@@ -13,12 +18,12 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="bg-charcoal px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section className="bg-charcoal px-4 py-12 text-white sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-gold-soft">
             Contact
           </p>
-          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl font-display text-4xl leading-[1.1] sm:text-6xl">
             Visit the boutique or send a private enquiry.
           </h1>
         </div>
@@ -32,13 +37,18 @@ export default function ContactPage() {
                 Boutique Details
               </h2>
               <div className="mt-6 grid gap-4 text-sm text-ink/70">
-                <a href={whatsappUrl} className="flex gap-3 hover:text-gold-deep">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex min-w-0 gap-3 break-all hover:text-gold-deep"
+                >
                   <Phone size={18} className="text-gold-deep" aria-hidden="true" />
-                  +91 99999 99999
+                  {CONTACT_PHONE_DISPLAY}
                 </a>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="flex gap-3 hover:text-gold-deep"
+                  className="flex min-w-0 gap-3 break-all hover:text-gold-deep"
                 >
                   <Mail size={18} className="text-gold-deep" aria-hidden="true" />
                   {CONTACT_EMAIL}

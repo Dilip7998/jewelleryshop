@@ -2,8 +2,8 @@
 
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { fetchProducts } from "@/lib/api";
-import { categories, products as fallbackProducts } from "@/lib/data";
+import { fetchCategories, fetchProducts } from "@/lib/api";
+import { categories as fallbackCategories, products as fallbackProducts } from "@/lib/data";
 import { formatCurrency } from "@/lib/constants";
 import type { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
@@ -12,18 +12,21 @@ const maxCatalogPrice = 250000;
 
 export function CatalogClient() {
   const [items, setItems] = useState<Product[]>(fallbackProducts);
+  const [categories, setCategories] = useState<string[]>(fallbackCategories);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
   const [maxPrice, setMaxPrice] = useState(maxCatalogPrice);
   const [stockOnly, setStockOnly] = useState(false);
 
   useEffect(() => {
-    fetchProducts()
-      .then((data) => {
-        if (data.length > 0) setItems(data);
+    Promise.all([fetchProducts(), fetchCategories()])
+      .then(([productData, categoryData]) => {
+        if (productData.length > 0) setItems(productData);
+        if (categoryData.length > 0) setCategories(categoryData);
       })
       .catch(() => {
         setItems(fallbackProducts);
+        setCategories(fallbackCategories);
       });
   }, []);
 
@@ -42,10 +45,10 @@ export function CatalogClient() {
 
   return (
     <section className="bg-ivory py-10 sm:py-14">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-lg border border-gold/18 bg-white p-4 shadow-premium sm:p-5">
-          <div className="grid gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-center">
-            <label className="relative block">
+      <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full min-w-0 overflow-hidden rounded-lg border border-gold/18 bg-white p-4 shadow-premium sm:p-5">
+          <div className="grid min-w-0 gap-4 lg:grid-cols-[1fr_auto_auto] lg:items-center">
+            <label className="relative block min-w-0">
               <span className="sr-only">Search products</span>
               <Search
                 size={18}
@@ -76,7 +79,7 @@ export function CatalogClient() {
             </div>
           </div>
 
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 flex min-w-0 flex-wrap gap-2">
             {["All", ...categories].map((item) => (
               <button
                 type="button"
@@ -105,7 +108,7 @@ export function CatalogClient() {
               step="5000"
               value={maxPrice}
               onChange={(event) => setMaxPrice(Number(event.target.value))}
-              className="accent-gold"
+              className="w-full min-w-0 accent-gold"
             />
           </div>
         </div>

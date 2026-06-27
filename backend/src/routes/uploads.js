@@ -10,8 +10,9 @@ const upload = multer({
     files: 8
   },
   fileFilter(req, file, callback) {
-    if (!file.mimetype.startsWith("image/")) {
-      callback(new Error("Only image files are allowed"));
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+    if (!allowedTypes.includes(file.mimetype)) {
+      callback(new Error("Only JPG, PNG, WebP, and AVIF images are allowed"));
       return;
     }
     callback(null, true);

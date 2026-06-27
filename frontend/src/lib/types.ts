@@ -2,7 +2,7 @@ export type Category = string;
 
 export type Product = {
   _id?: string;
-  id: string;
+  id?: string;
   name: string;
   category: Category;
   originalPrice: number;
@@ -18,7 +18,7 @@ export type Product = {
 
 export type Offer = {
   _id?: string;
-  id: string;
+  id?: string;
   title: string;
   type: "Festival Offer" | "Limited Time" | "New Arrival";
   discountPercent: number;

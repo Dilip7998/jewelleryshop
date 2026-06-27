@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Instagram } from "lucide-react";
+import { INSTAGRAM_URL } from "@/lib/constants";
 import { products } from "@/lib/data";
 
 export function InstagramGallery() {
@@ -18,7 +19,9 @@ export function InstagramGallery() {
             </h2>
           </div>
           <a
-            href="#"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex w-fit items-center gap-2 rounded-full border border-gold/50 px-5 py-3 text-sm font-bold text-charcoal transition hover:bg-gold"
           >
             <Instagram size={17} aria-hidden="true" />

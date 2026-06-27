@@ -6,7 +6,7 @@ export function ContactMap() {
       <iframe
         title="Store location map"
         src={`https://www.google.com/maps?q=${encodeURIComponent(STORE_MAP_QUERY)}&output=embed`}
-        className="h-[360px] w-full"
+        className="h-[280px] w-full sm:h-[360px]"
         loading="lazy"
         referrerPolicy="no-referrer-when-downgrade"
       />

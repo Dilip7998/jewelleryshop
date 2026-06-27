@@ -8,7 +8,7 @@ type OfferCardProps = {
 
 export function OfferCard({ offer }: OfferCardProps) {
   return (
-    <article className="shine-border group rounded-lg bg-charcoal p-6 text-white shadow-premium transition duration-300 hover:-translate-y-1 hover:shadow-glow">
+    <article className="shine-border group rounded-lg bg-charcoal p-5 text-white shadow-premium transition duration-300 hover:-translate-y-1 hover:shadow-glow sm:p-6">
       <div className="flex items-center justify-between gap-4">
         <span className="rounded-full bg-gold/18 px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-gold-soft">
           {offer.type}

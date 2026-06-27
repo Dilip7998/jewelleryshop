@@ -20,7 +20,7 @@ export function SectionHeading({
       <p className="text-xs font-bold uppercase tracking-[0.26em] text-gold-deep">
         {eyebrow}
       </p>
-      <h2 className="mt-3 font-display text-4xl leading-tight text-charcoal sm:text-5xl">
+      <h2 className="mt-3 font-display text-[2.15rem] leading-[1.12] text-charcoal sm:text-5xl">
         {title}
       </h2>
       {copy ? <p className="mt-4 text-base leading-7 text-ink/68">{copy}</p> : null}

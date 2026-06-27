@@ -2,6 +2,9 @@
   "name": "jewellery-shop-backend",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.js",

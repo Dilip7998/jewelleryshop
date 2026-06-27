@@ -16,12 +16,48 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  width: 100%;
+  max-width: 100%;
 }
 
 body {
   margin: 0;
   background: #fffaf0;
   color: #15120e;
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  width: 100%;
+  max-width: 100%;
+}
+
+main {
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
 }
 
 ::selection {
@@ -99,5 +135,13 @@ body {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 639px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
   }
 }

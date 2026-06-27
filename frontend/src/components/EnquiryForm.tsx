@@ -79,7 +79,7 @@ export function EnquiryForm({ productId }: { productId?: string }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="inline-flex w-fit items-center gap-2 rounded-full bg-charcoal px-6 py-3 text-sm font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal disabled:cursor-wait disabled:opacity-60"
+        className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-charcoal px-6 py-3 text-base font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal disabled:cursor-wait disabled:opacity-60 sm:w-fit sm:text-sm"
       >
         <Send size={16} aria-hidden="true" />
         {status === "submitting" ? "Submitting..." : "Submit Enquiry"}

@@ -18,16 +18,16 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gold/20 bg-[#1c1408]/95 text-white shadow-premium backdrop-blur-xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3" aria-label={BRAND_NAME}>
-          <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/50 bg-white/5 text-gold-soft">
+      <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:px-6 sm:py-3 lg:px-8">
+        <Link href="/" className="flex min-w-0 max-w-[calc(100%-3rem)] items-center gap-2.5" aria-label={BRAND_NAME}>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-white/5 text-gold-soft sm:h-11 sm:w-11">
             <Gem size={22} aria-hidden="true" />
           </span>
-          <span>
-            <span className="block font-display text-2xl font-bold leading-5 tracking-wide text-gold-soft drop-shadow-[0_1px_8px_rgba(242,208,113,0.45)]">
+          <span className="min-w-0">
+            <span className="block truncate font-display text-[1.35rem] font-bold leading-5 tracking-wide text-gold-soft drop-shadow-[0_1px_8px_rgba(242,208,113,0.45)] sm:text-2xl">
               {BRAND_NAME}
             </span>
-            <span className="text-xs uppercase tracking-[0.24em] text-champagne">
+            <span className="block truncate text-[0.62rem] uppercase tracking-[0.18em] text-champagne sm:text-xs sm:tracking-[0.24em]">
               Fine Jewellery
             </span>
           </span>
@@ -65,9 +65,11 @@ export function Navbar() {
 
         <button
           type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white lg:hidden"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 text-white lg:hidden"
           onClick={() => setOpen((value) => !value)}
           aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
         >
           {open ? <X size={21} /> : <Menu size={21} />}
         </button>
@@ -75,13 +77,13 @@ export function Navbar() {
 
       {open ? (
         <div className="border-t border-gold/15 bg-[#1c1408] px-4 py-4 lg:hidden">
-          <nav className="mx-auto grid max-w-7xl gap-3" aria-label="Mobile">
+          <nav id="mobile-navigation" className="mx-auto grid max-w-7xl gap-1" aria-label="Mobile">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="rounded-md px-3 py-2 text-sm font-semibold text-pearl transition hover:bg-white/10 hover:text-gold-soft"
+                className="flex min-h-11 items-center rounded-md px-3 py-2 text-base font-semibold text-pearl transition hover:bg-white/10 hover:text-gold-soft"
               >
                 {link.label}
               </Link>

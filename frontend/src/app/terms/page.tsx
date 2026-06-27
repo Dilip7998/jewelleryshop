@@ -31,12 +31,12 @@ const sections: [string, string][] = [
 export default function TermsPage() {
   return (
     <>
-      <section className="bg-charcoal px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section className="bg-charcoal px-4 py-12 text-white sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-gold-soft">
             Terms
           </p>
-          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-tight sm:text-6xl">
+          <h1 className="mt-4 max-w-3xl font-display text-4xl leading-[1.1] sm:text-6xl">
             Terms & Conditions
           </h1>
         </div>

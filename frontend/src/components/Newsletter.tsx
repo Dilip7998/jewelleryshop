@@ -28,7 +28,7 @@ export function Newsletter() {
           <p className="text-xs font-bold uppercase tracking-[0.26em] text-gold-soft">
             Newsletter
           </p>
-          <h2 className="mt-3 font-display text-4xl">Private collection alerts</h2>
+          <h2 className="mt-3 font-display text-[2.15rem] leading-[1.12] sm:text-4xl">Private collection alerts</h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-pearl/72">
             Receive new arrival previews, festival offers, and appointment-only
             collection updates.
@@ -48,7 +48,7 @@ export function Newsletter() {
           />
           <button
             type="submit"
-            className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-bold text-charcoal transition hover:bg-gold-soft"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gold px-6 py-3 text-base font-bold text-charcoal transition hover:bg-gold-soft sm:text-sm"
           >
             <Mail size={17} aria-hidden="true" />
             Subscribe

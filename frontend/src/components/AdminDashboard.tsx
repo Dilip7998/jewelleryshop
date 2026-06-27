@@ -27,11 +27,7 @@ import {
   updateProduct,
   uploadImages
 } from "@/lib/api";
-import {
-  categories as fallbackCategories,
-  offers as fallbackOffers,
-  products as fallbackProducts
-} from "@/lib/data";
+import { categories as fallbackCategories } from "@/lib/data";
 import { discountedPrice, formatCurrency } from "@/lib/constants";
 import type { EnquiryInput, Offer, Product, ProductInput } from "@/lib/types";
 
@@ -64,9 +60,9 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
-  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(fallbackCategories);
-  const [offers, setOffers] = useState<Offer[]>(fallbackOffers);
+  const [offers, setOffers] = useState<Offer[]>([]);
   const [enquiries, setEnquiries] = useState<
     Array<EnquiryInput & { _id: string; createdAt: string }>
   >([]);
@@ -79,12 +75,35 @@ export function AdminDashboard() {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("jewellery-admin-token");
-    if (stored) setToken(stored);
+    if (stored) queueMicrotask(() => setToken(stored));
   }, []);
 
   useEffect(() => {
     if (!token) return;
-    refreshData(token);
+    let active = true;
+
+    Promise.all([
+      fetchProducts(),
+      fetchCategories(),
+      fetchOffers(),
+      fetchEnquiries(token)
+    ])
+      .then(([productData, categoryData, offerData, enquiryData]) => {
+        if (!active) return;
+        setProducts(productData);
+        setCategories(categoryData);
+        setOffers(offerData);
+        setEnquiries(enquiryData);
+      })
+      .catch((err) => {
+        if (active) {
+          setError(err instanceof Error ? err.message : "Unable to load admin data");
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, [token]);
 
   const stats = useMemo(
@@ -96,24 +115,6 @@ export function AdminDashboard() {
     ],
     [categories.length, enquiries.length, products]
   );
-
-  const refreshData = async (activeToken: string) => {
-    try {
-      const [productData, categoryData, offerData, enquiryData] =
-        await Promise.all([
-          fetchProducts(),
-          fetchCategories(),
-          fetchOffers(),
-          fetchEnquiries(activeToken)
-        ]);
-      if (productData.length) setProducts(productData);
-      if (categoryData.length) setCategories(categoryData);
-      if (offerData.length) setOffers(offerData);
-      setEnquiries(enquiryData);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to load admin data");
-    }
-  };
 
   const onLogin = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -158,7 +159,9 @@ export function AdminDashboard() {
   };
 
   const startEdit = (product: Product) => {
-    setEditingId(product._id || product.id);
+    const id = product._id || product.id;
+    if (!id) return;
+    setEditingId(id);
     setProductForm({
       name: product.name,
       category: product.category,
@@ -178,6 +181,8 @@ export function AdminDashboard() {
   const removeProduct = async (product: Product) => {
     if (!token) return;
     const id = product._id || product.id;
+    if (!id) return;
+    if (!window.confirm(`Delete ${product.name}? This cannot be undone.`)) return;
     setLoading(true);
     try {
       await deleteProduct(id, token);
@@ -193,6 +198,7 @@ export function AdminDashboard() {
   const toggleStock = async (product: Product) => {
     if (!token) return;
     const id = product._id || product.id;
+    if (!id) return;
     const updated = { ...product, inStock: !product.inStock };
     setProducts((current) =>
       current.map((item) => ((item._id || item.id) === id ? updated : item))
@@ -237,6 +243,7 @@ export function AdminDashboard() {
 
   const removeCategory = async (name: string) => {
     if (!token) return;
+    if (!window.confirm(`Delete the ${name} category?`)) return;
     try {
       await deleteCategory(name, token);
       setCategories((current) => current.filter((item) => item !== name));
@@ -262,6 +269,8 @@ export function AdminDashboard() {
   const removeOffer = async (offer: Offer) => {
     if (!token) return;
     const id = offer._id || offer.id;
+    if (!id) return;
+    if (!window.confirm(`Delete the ${offer.title} offer?`)) return;
     try {
       await deleteOffer(id, token);
       setOffers((current) => current.filter((item) => (item._id || item.id) !== id));

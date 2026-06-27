@@ -13,13 +13,13 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="bg-charcoal px-4 py-16 text-white sm:px-6 lg:px-8">
+      <section className="bg-charcoal px-4 py-12 text-white sm:px-6 sm:py-16 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-gold-soft">
               About {BRAND_NAME}
             </p>
-            <h1 className="mt-4 font-display text-5xl leading-tight sm:text-6xl">
+            <h1 className="mt-4 font-display text-4xl leading-[1.1] sm:text-6xl">
               A boutique built on craftsmanship and trust.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-pearl/74">
@@ -28,7 +28,7 @@ export default function AboutPage() {
               personal consultation.
             </p>
           </div>
-          <div className="relative min-h-[420px] overflow-hidden rounded-lg border border-gold/24">
+          <div className="relative min-h-[320px] overflow-hidden rounded-lg border border-gold/24 sm:min-h-[420px]">
             <Image
               src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=1400&q=88"
               alt="Luxury jewellery craftsmanship"

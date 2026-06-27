@@ -2,16 +2,31 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { fetchProducts } from "@/lib/api";
 import { products } from "@/lib/data";
+import type { Product } from "@/lib/types";
 
 export function LatestCollectionSlider() {
+  const [items, setItems] = useState<Product[]>(products);
+
+  useEffect(() => {
+    fetchProducts()
+      .then((data) => data.length > 0 && setItems(data))
+      .catch(() => undefined);
+  }, []);
+
   const latest = useMemo(
-    () => products.filter((product) => product.newArrival || product.featured),
-    []
+    () => {
+      const markedLatest = items.filter(
+        (product) => product.newArrival || product.featured
+      );
+      return markedLatest.length > 0 ? markedLatest : items;
+    },
+    [items]
   );
   const [index, setIndex] = useState(0);
-  const active = latest[index];
+  const active = latest.length > 0 ? latest[index % latest.length] : undefined;
 
   const changeSlide = (direction: number) => {
     setIndex((current) => {
@@ -22,6 +37,8 @@ export function LatestCollectionSlider() {
     });
   };
 
+  if (!active) return null;
+
   return (
     <section className="bg-charcoal py-16 text-white sm:py-20">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:px-8">
@@ -29,7 +46,7 @@ export function LatestCollectionSlider() {
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-gold-soft">
             Latest collection
           </p>
-          <h2 className="mt-4 font-display text-4xl leading-tight sm:text-5xl">
+          <h2 className="mt-4 font-display text-[2.15rem] leading-[1.12] sm:text-5xl">
             Bridal and evening pieces with modern finishing.
           </h2>
           <p className="mt-5 text-base leading-7 text-pearl/72">
@@ -58,7 +75,7 @@ export function LatestCollectionSlider() {
           </div>
         </div>
 
-        <div className="relative min-h-[460px] overflow-hidden rounded-lg border border-gold/24 bg-white/5">
+        <div className="relative min-h-[360px] overflow-hidden rounded-lg border border-gold/24 bg-white/5 sm:min-h-[460px]">
           <Image
             src={active.images[0]}
             alt={active.name}

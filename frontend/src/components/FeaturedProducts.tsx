@@ -1,11 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { fetchProducts } from "@/lib/api";
 import { products } from "@/lib/data";
+import type { Product } from "@/lib/types";
 import { ProductCard } from "./ProductCard";
 import { SectionHeading } from "./SectionHeading";
 
 export function FeaturedProducts() {
-  const featured = products.filter((product) => product.featured).slice(0, 4);
+  const [items, setItems] = useState<Product[]>(products);
+
+  useEffect(() => {
+    fetchProducts()
+      .then((data) => data.length > 0 && setItems(data))
+      .catch(() => undefined);
+  }, []);
+
+  const markedFeatured = items.filter((product) => product.featured);
+  const featured = (markedFeatured.length > 0 ? markedFeatured : items).slice(0, 4);
 
   return (
     <section className="bg-ivory py-16 sm:py-20">
@@ -28,7 +42,7 @@ export function FeaturedProducts() {
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featured.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id || product.id} product={product} />
           ))}
         </div>
       </div>

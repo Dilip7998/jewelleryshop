@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
-import { BRAND_NAME, whatsappUrl, CONTACT_EMAIL, STORE_ADDRESS } from "@/lib/constants";
+import {
+  BRAND_NAME,
+  CONTACT_EMAIL,
+  FACEBOOK_URL,
+  INSTAGRAM_URL,
+  STORE_ADDRESS,
+  X_URL,
+  whatsappUrl
+} from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -12,15 +20,17 @@ export function Footer() {
             Premium gold, diamond, silver, and bridal jewellery with transparent
             pricing, curated offers, and direct boutique support.
           </p>
-          <div className="mt-6 flex gap-3">
+          <div className="mt-6 flex flex-wrap gap-3">
             {[
-              { icon: Instagram, label: "Instagram" },
-              { icon: Facebook, label: "Facebook" },
-              { icon: Twitter, label: "Twitter" }
-            ].map(({ icon: Icon, label }) => (
+              { icon: Instagram, label: "Instagram", href: INSTAGRAM_URL },
+              { icon: Facebook, label: "Facebook", href: FACEBOOK_URL },
+              { icon: Twitter, label: "X / Twitter", href: X_URL }
+            ].map(({ icon: Icon, label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-gold-soft transition hover:border-gold hover:bg-gold hover:text-charcoal"
                 aria-label={label}
                 title={label}
@@ -76,13 +86,18 @@ export function Footer() {
             Visit
           </h3>
           <div className="mt-4 grid gap-3 text-sm text-pearl/74">
-            <a href={whatsappUrl} className="flex gap-2 hover:text-gold-soft">
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex gap-2 hover:text-gold-soft"
+            >
               <Phone size={16} aria-hidden="true" />
               WhatsApp Boutique
             </a>
             <a
               href={`mailto:${CONTACT_EMAIL}`}
-              className="flex gap-2 hover:text-gold-soft"
+              className="flex min-w-0 gap-2 break-all hover:text-gold-soft"
             >
               <Mail size={16} aria-hidden="true" />
               {CONTACT_EMAIL}
