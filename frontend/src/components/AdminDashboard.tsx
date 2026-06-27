@@ -53,11 +53,26 @@ const emptyOffer: Omit<Offer, "id" | "_id"> = {
   cta: "Explore Collection"
 };
 
+type UploadedImage = {
+  url: string;
+  name: string;
+};
+
+function imageNameFromUrl(url: string, index: number) {
+  try {
+    const filename = new URL(url).pathname.split("/").pop();
+    return filename ? decodeURIComponent(filename) : `Image ${index + 1}`;
+  } catch {
+    return `Image ${index + 1}`;
+  }
+}
+
 export function AdminDashboard() {
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
@@ -67,6 +82,7 @@ export function AdminDashboard() {
     Array<EnquiryInput & { _id: string; createdAt: string }>
   >([]);
   const [productForm, setProductForm] = useState<ProductInput>(emptyProduct);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newCategory, setNewCategory] = useState("");
   const [offerForm, setOfferForm] = useState<Omit<Offer, "id" | "_id">>(
@@ -135,6 +151,14 @@ export function AdminDashboard() {
   const onProductSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!token) return;
+    if (isUploading) {
+      setError("Please wait for the image upload to finish.");
+      return;
+    }
+    if (productForm.images.length === 0) {
+      setError("Upload at least one product image before saving.");
+      return;
+    }
     setLoading(true);
     setError("");
     try {
@@ -149,6 +173,7 @@ export function AdminDashboard() {
         );
       });
       setProductForm(emptyProduct);
+      setUploadedImages([]);
       setEditingId(null);
       setNotice(editingId ? "Product updated." : "Product added.");
     } catch (err) {
@@ -175,6 +200,12 @@ export function AdminDashboard() {
       featured: Boolean(product.featured),
       newArrival: Boolean(product.newArrival)
     });
+    setUploadedImages(
+      product.images.map((url, index) => ({
+        url,
+        name: imageNameFromUrl(url, index)
+      }))
+    );
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -211,21 +242,49 @@ export function AdminDashboard() {
   };
 
   const onUpload = async (files: FileList | null) => {
-    if (!files || !token) return;
-    setLoading(true);
+    if (!files || files.length === 0 || !token) return;
+    const selectedFiles = Array.from(files);
+
+    if (productForm.images.length + selectedFiles.length > 8) {
+      setError("A product can have a maximum of 8 images.");
+      return;
+    }
+
+    setIsUploading(true);
     setError("");
+    setNotice("");
     try {
-      const response = await uploadImages(Array.from(files), token);
+      const response = await uploadImages(selectedFiles, token);
+      const uploaded = response.images?.length
+        ? response.images
+        : response.urls.map((url, index) => ({
+            url,
+            name: selectedFiles[index]?.name || imageNameFromUrl(url, index)
+          }));
+
       setProductForm((current) => ({
         ...current,
-        images: [...current.images, ...response.urls]
+        images: [...current.images, ...uploaded.map((image) => image.url)]
       }));
-      setNotice("Images uploaded.");
+      setUploadedImages((current) => [...current, ...uploaded]);
+      setNotice(
+        `${uploaded.length} image${uploaded.length === 1 ? "" : "s"} uploaded.`
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
-      setLoading(false);
+      setIsUploading(false);
     }
+  };
+
+  const removeUploadedImage = (indexToRemove: number) => {
+    setProductForm((current) => ({
+      ...current,
+      images: current.images.filter((_, index) => index !== indexToRemove)
+    }));
+    setUploadedImages((current) =>
+      current.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const saveCategory = async (event: FormEvent<HTMLFormElement>) => {
@@ -475,36 +534,84 @@ export function AdminDashboard() {
                 />
               </label>
 
-              <label className="grid gap-2 text-sm font-semibold text-charcoal">
-                Image URLs
-                <textarea
-                  value={productForm.images.join("\n")}
-                  onChange={(event) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      images: event.target.value
-                        .split("\n")
-                        .map((item) => item.trim())
-                        .filter(Boolean)
-                    }))
-                  }
-                  rows={4}
-                  className="rounded-md border border-gold/24 px-4 py-3 outline-none ring-gold/30 focus:ring-4"
-                  placeholder="One image URL per line"
-                />
-              </label>
+              <div className="grid gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-charcoal">
+                    Product Images <span className="text-red-700">*</span>
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-ink/55">
+                    Upload up to 8 JPG, PNG, WebP, or AVIF images. Maximum 5 MB each.
+                  </p>
+                </div>
 
-              <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-gold/40 bg-ivory px-4 py-4 text-sm font-bold text-charcoal transition hover:bg-gold/10">
-                <ImagePlus size={18} aria-hidden="true" />
-                Upload Multiple Images
-                <input
-                  type="file"
-                  multiple
-                  accept="image/*"
-                  className="sr-only"
-                  onChange={(event) => onUpload(event.target.files)}
-                />
-              </label>
+                <label
+                  className={`flex items-center justify-center gap-2 rounded-md border border-dashed border-gold/40 bg-ivory px-4 py-4 text-sm font-bold text-charcoal transition ${
+                    isUploading
+                      ? "cursor-wait opacity-65"
+                      : "cursor-pointer hover:bg-gold/10"
+                  }`}
+                >
+                  {isUploading ? (
+                    <Loader2 className="animate-spin" size={18} aria-hidden="true" />
+                  ) : (
+                    <ImagePlus size={18} aria-hidden="true" />
+                  )}
+                  {isUploading ? "Uploading images..." : "Choose Images to Upload"}
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    disabled={isUploading || uploadedImages.length >= 8}
+                    className="sr-only"
+                    onChange={(event) => {
+                      void onUpload(event.target.files);
+                      event.target.value = "";
+                    }}
+                  />
+                </label>
+
+                {uploadedImages.length > 0 ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {uploadedImages.map((image, index) => (
+                      <div
+                        key={`${image.url}-${index}`}
+                        className="flex min-w-0 items-center gap-3 rounded-md border border-gold/18 bg-ivory p-3"
+                      >
+                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-pearl">
+                          <Image
+                            src={image.url}
+                            alt={image.name}
+                            fill
+                            sizes="56px"
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold text-charcoal" title={image.name}>
+                            {image.name}
+                          </p>
+                          <p className="mt-1 text-xs font-semibold text-emerald-700">
+                            Uploaded
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(index)}
+                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-red-200 text-red-700 transition hover:bg-red-50"
+                          aria-label={`Remove ${image.name}`}
+                          title={`Remove ${image.name}`}
+                        >
+                          <Trash2 size={15} aria-hidden="true" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="rounded-md bg-amber-50 px-4 py-3 text-xs font-semibold text-amber-800">
+                    No image uploaded yet. At least one image is required.
+                  </p>
+                )}
+              </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
                 {[
@@ -535,7 +642,7 @@ export function AdminDashboard() {
               <div className="flex flex-wrap gap-3">
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || isUploading}
                   className="inline-flex items-center gap-2 rounded-full bg-charcoal px-6 py-3 text-sm font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal disabled:opacity-60"
                 >
                   {loading ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}
@@ -547,6 +654,7 @@ export function AdminDashboard() {
                     onClick={() => {
                       setEditingId(null);
                       setProductForm(emptyProduct);
+                      setUploadedImages([]);
                     }}
                     className="rounded-full border border-gold/35 px-6 py-3 text-sm font-bold text-charcoal transition hover:bg-gold/12"
                   >

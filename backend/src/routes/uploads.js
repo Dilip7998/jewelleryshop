@@ -28,8 +28,14 @@ router.post("/", requireAdmin, upload.array("images", 8), async (req, res, next)
     const uploaded = await Promise.all(
       req.files.map((file) => uploadBuffer(file.buffer))
     );
+    const images = uploaded.map((result, index) => ({
+      url: result.secure_url,
+      name: req.files[index].originalname
+    }));
+
     return res.status(201).json({
-      urls: uploaded.map((result) => result.secure_url)
+      images,
+      urls: images.map((image) => image.url)
     });
   } catch (error) {
     return next(error);

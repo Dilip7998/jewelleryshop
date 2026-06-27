@@ -143,5 +143,8 @@ export async function uploadImages(files: File[], token: string) {
     throw new Error(error.message || "Image upload failed");
   }
 
-  return response.json() as Promise<{ urls: string[] }>;
+  return response.json() as Promise<{
+    images: Array<{ url: string; name: string }>;
+    urls: string[];
+  }>;
 }
