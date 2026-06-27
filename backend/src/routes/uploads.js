@@ -1,7 +1,10 @@
 const multer = require("multer");
 const router = require("express").Router();
 const { requireAdmin } = require("../middleware/auth");
-const { uploadBuffer } = require("../config/cloudinary");
+const {
+  isCloudinaryConfigured,
+  uploadBuffer
+} = require("../config/cloudinary");
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -24,6 +27,12 @@ router.post("/", requireAdmin, upload.array("images", 8), async (req, res, next)
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "At least one image is required" });
     }
+    if (!isCloudinaryConfigured()) {
+      return res.status(503).json({
+        message:
+          "Image uploads are not configured. Add the Cloudinary credentials to the backend environment."
+      });
+    }
 
     const uploaded = await Promise.all(
       req.files.map((file) => uploadBuffer(file.buffer))
@@ -38,7 +47,11 @@ router.post("/", requireAdmin, upload.array("images", 8), async (req, res, next)
       urls: images.map((image) => image.url)
     });
   } catch (error) {
-    return next(error);
+    console.error("Cloudinary image upload failed:", error);
+    return res.status(502).json({
+      message:
+        "Image upload failed. Verify the backend Cloudinary credentials and try again."
+    });
   }
 });
 

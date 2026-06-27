@@ -18,11 +18,17 @@ router.post("/", async (req, res, next) => {
       productId: productId || ""
     });
 
-    sendEnquiryNotification(enquiry).catch((error) =>
-      console.warn("Enquiry email notification failed:", error.message)
-    );
+    let notificationSent = false;
+    try {
+      notificationSent = await sendEnquiryNotification(enquiry);
+      if (!notificationSent) {
+        console.warn("Enquiry saved, but SMTP email notifications are not configured");
+      }
+    } catch (error) {
+      console.warn("Enquiry email notification failed:", error.message);
+    }
 
-    return res.status(201).json({ success: true });
+    return res.status(201).json({ success: true, notificationSent });
   } catch (error) {
     return next(error);
   }

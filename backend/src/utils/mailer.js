@@ -20,14 +20,18 @@ function createTransporter() {
 
 async function sendEnquiryNotification(enquiry) {
   const transporter = createTransporter();
-  if (!transporter) return;
+  if (!transporter) return false;
 
-  const to = process.env.NOTIFY_EMAIL || process.env.ADMIN_EMAIL;
-  if (!to) return;
+  const recipients = [process.env.ADMIN_EMAIL, process.env.NOTIFY_EMAIL]
+    .flatMap((value) => (value || "").split(","))
+    .map((value) => value.trim())
+    .filter((value, index, values) => value && values.indexOf(value) === index);
+  if (recipients.length === 0) return false;
 
   await transporter.sendMail({
     from: process.env.SMTP_USER,
-    to,
+    to: recipients,
+    replyTo: enquiry.email,
     subject: `New jewellery enquiry from ${enquiry.name}`,
     text: [
       `Name: ${enquiry.name}`,
@@ -40,6 +44,8 @@ async function sendEnquiryNotification(enquiry) {
       .filter(Boolean)
       .join("\n")
   });
+
+  return true;
 }
 
 module.exports = { sendEnquiryNotification };
