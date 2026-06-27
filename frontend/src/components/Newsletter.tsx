@@ -9,13 +9,14 @@ export function Newsletter() {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
     const email = String(form.get("email") || "");
 
     try {
       await subscribeNewsletter(email);
       setMessage("Subscribed to collection updates.");
-      event.currentTarget.reset();
+      formElement.reset();
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Subscription failed.");
     }

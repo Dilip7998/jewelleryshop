@@ -12,10 +12,11 @@ export function EnquiryForm({ productId }: { productId?: string }) {
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const formElement = event.currentTarget;
     setStatus("submitting");
     setError("");
 
-    const form = new FormData(event.currentTarget);
+    const form = new FormData(formElement);
     const input = {
       name: String(form.get("name") || ""),
       phone: String(form.get("phone") || ""),
@@ -26,7 +27,7 @@ export function EnquiryForm({ productId }: { productId?: string }) {
 
     try {
       await submitEnquiry(input);
-      event.currentTarget.reset();
+      formElement.reset();
       setStatus("success");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to submit enquiry");
