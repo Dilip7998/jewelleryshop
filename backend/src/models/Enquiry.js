@@ -7,6 +7,7 @@ const enquirySchema = new mongoose.Schema(
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 254 },
     message: { type: String, required: true, trim: true, maxlength: 2000 },
     productId: { type: String, default: "", trim: true, maxlength: 120 },
+    productName: { type: String, default: "", trim: true, maxlength: 120 },
     status: {
       type: String,
       enum: ["new", "contacted", "closed"],

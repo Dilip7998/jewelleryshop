@@ -67,7 +67,17 @@ export default async function ProductDetailsPage({
   const productWhatsappUrl = whatsappUrl.replace(
     /text=.*/,
     `text=${encodeURIComponent(
-      `Hello, I am interested in ${product.name}. Product ID: ${productId}`
+      [
+        "Hello, I want to know more about this product.",
+        `Product: ${product.name}`,
+        `Category: ${product.category}`,
+        `Price: ${formatCurrency(price)}`,
+        product.material ? `Material: ${product.material}` : "",
+        product.sku ? `SKU: ${product.sku}` : "",
+        `Link: ${productId ? `/catalog/${productId}` : "/catalog"}`
+      ]
+        .filter(Boolean)
+        .join("\n")
     )}`
   );
 
@@ -178,7 +188,7 @@ export default async function ProductDetailsPage({
                 availability.
               </p>
               <div className="mt-5">
-                <EnquiryForm productId={productId} />
+                <EnquiryForm productId={productId} productName={product.name} />
               </div>
             </div>
           </div>

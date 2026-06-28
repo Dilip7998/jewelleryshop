@@ -32,6 +32,12 @@ export type EnquiryInput = {
   email: string;
   message: string;
   productId?: string;
+  productName?: string;
+};
+
+export type EnquiryRecord = EnquiryInput & {
+  _id: string;
+  createdAt: string;
 };
 
 export type ProductInput = Omit<Product, "id" | "_id"> & {

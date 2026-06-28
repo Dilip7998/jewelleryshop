@@ -85,6 +85,7 @@ async function sendEnquiryNotification(enquiry) {
         `Name: ${enquiry.name}`,
         `Phone: ${enquiry.phone}`,
         `Email: ${enquiry.email}`,
+        enquiry.productName ? `Product Name: ${enquiry.productName}` : "",
         enquiry.productId ? `Product: ${enquiry.productId}` : "",
         "",
         enquiry.message

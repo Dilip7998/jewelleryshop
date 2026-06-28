@@ -5,7 +5,7 @@ const { sendEnquiryNotification } = require("../utils/mailer");
 
 router.post("/", async (req, res, next) => {
   try {
-    const { name, phone, email, message, productId } = req.body;
+    const { name, phone, email, message, productId, productName } = req.body;
     if (!name || !phone || !email || !message) {
       return res.status(400).json({ message: "All enquiry fields are required" });
     }
@@ -15,7 +15,8 @@ router.post("/", async (req, res, next) => {
       phone,
       email,
       message,
-      productId: productId || ""
+      productId: productId || "",
+      productName: productName || ""
     });
 
     let notificationSent = false;

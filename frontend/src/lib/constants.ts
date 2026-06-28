@@ -1,5 +1,5 @@
 export const BRAND_NAME = "Pooja Jewellers";
-export const PHONE_NUMBER = "919999999999";
+export const PHONE_NUMBER = "917061002734";
 
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";

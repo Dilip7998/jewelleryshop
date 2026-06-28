@@ -1,4 +1,4 @@
-import type { EnquiryInput, Product, ProductInput } from "./types";
+import type { EnquiryInput, EnquiryRecord, Product, ProductInput } from "./types";
 import type { Offer } from "./types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
@@ -113,10 +113,7 @@ export async function submitEnquiry(input: EnquiryInput) {
 }
 
 export async function fetchEnquiries(token: string) {
-  return request<Array<EnquiryInput & { _id: string; createdAt: string }>>(
-    "/enquiries",
-    { token }
-  );
+  return request<EnquiryRecord[]>("/enquiries", { token });
 }
 
 export async function deleteEnquiry(id: string, token: string) {

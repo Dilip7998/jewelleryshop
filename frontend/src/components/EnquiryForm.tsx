@@ -6,7 +6,13 @@ import { submitEnquiry } from "@/lib/api";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function EnquiryForm({ productId }: { productId?: string }) {
+export function EnquiryForm({
+  productId,
+  productName
+}: {
+  productId?: string;
+  productName?: string;
+}) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
 
@@ -17,13 +23,14 @@ export function EnquiryForm({ productId }: { productId?: string }) {
     setError("");
 
     const form = new FormData(formElement);
-    const input = {
-      name: String(form.get("name") || ""),
-      phone: String(form.get("phone") || ""),
-      email: String(form.get("email") || ""),
-      message: String(form.get("message") || ""),
-      productId
-    };
+      const input = {
+        name: String(form.get("name") || ""),
+        phone: String(form.get("phone") || ""),
+        email: String(form.get("email") || ""),
+        message: String(form.get("message") || ""),
+        productId,
+        productName
+      };
 
     try {
       await submitEnquiry(input);

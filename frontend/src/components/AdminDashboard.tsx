@@ -32,7 +32,7 @@ import {
 } from "@/lib/api";
 import { categories as fallbackCategories } from "@/lib/data";
 import { discountedPrice, formatCurrency } from "@/lib/constants";
-import type { EnquiryInput, Offer, Product, ProductInput } from "@/lib/types";
+import type { EnquiryRecord, Offer, Product, ProductInput } from "@/lib/types";
 
 const emptyProduct: ProductInput = {
   name: "",
@@ -82,7 +82,7 @@ export function AdminDashboard() {
   const [categories, setCategories] = useState<string[]>(fallbackCategories);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [enquiries, setEnquiries] = useState<
-    Array<EnquiryInput & { _id: string; createdAt: string }>
+    EnquiryRecord[]
   >([]);
   const [productForm, setProductForm] = useState<ProductInput>(emptyProduct);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
@@ -905,6 +905,11 @@ export function AdminDashboard() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="font-bold text-charcoal">{enquiry.name}</p>
+                        {enquiry.productName ? (
+                          <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-gold-deep">
+                            {enquiry.productName}
+                          </p>
+                        ) : null}
                         <p className="mt-1 text-sm text-ink/60">
                           {enquiry.phone} · {enquiry.email}
                         </p>
