@@ -67,11 +67,15 @@ export function ProductWhatsAppShareButton({
       type="button"
       onClick={() => void onClick()}
       disabled={busy}
-      className="inline-flex min-h-12 items-center gap-2 rounded-full border border-gold/30 px-5 text-sm font-bold text-charcoal transition hover:bg-gold/10 disabled:cursor-wait disabled:opacity-60"
+      className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-gold/30 text-charcoal transition hover:bg-gold/10 disabled:cursor-wait disabled:opacity-60"
+      aria-label="Share product"
+      title="Share product"
     >
-      {busy ? <Loader2 size={16} className="animate-spin" aria-hidden="true" /> : <Share2 size={16} aria-hidden="true" />}
-      <MessageCircle size={16} aria-hidden="true" />
-      Share on WhatsApp
+      {busy ? (
+        <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+      ) : (
+        <Share2 size={16} aria-hidden="true" />
+      )}
     </button>
   );
 }

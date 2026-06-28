@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Phone } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
 import { ProductDetailGallery } from "@/components/ProductDetailGallery";
 import { ProductWhatsAppShareButton } from "@/components/ProductWhatsAppShareButton";
 import { fetchProducts } from "@/lib/api";
@@ -167,6 +167,15 @@ export default async function ProductDetailsPage({
               >
                 <Phone size={16} aria-hidden="true" />
                 Call Boutique
+              </a>
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#25d366] px-5 text-sm font-bold text-white transition hover:bg-[#1faa52]"
+              >
+                <MessageCircle size={16} aria-hidden="true" />
+                Contact on WhatsApp
               </a>
               <ProductWhatsAppShareButton
                 title={product.name}
