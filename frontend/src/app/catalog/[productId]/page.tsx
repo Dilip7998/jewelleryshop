@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Phone } from "lucide-react";
-import { EnquiryForm } from "@/components/EnquiryForm";
 import { ProductDetailGallery } from "@/components/ProductDetailGallery";
 import { ProductWhatsAppShareButton } from "@/components/ProductWhatsAppShareButton";
 import { fetchProducts } from "@/lib/api";
@@ -175,17 +174,6 @@ export default async function ProductDetailsPage({
                 shareUrl={productPageUrl}
                 imageUrl={product.images[0]}
               />
-            </div>
-
-            <div className="mt-8 rounded-[1.25rem] border border-gold/18 bg-ivory p-4">
-              <h2 className="font-display text-2xl text-charcoal">Quick Enquiry</h2>
-              <p className="mt-2 text-sm leading-6 text-ink/64">
-                Send the boutique your interest in this product and ask for pricing or
-                availability.
-              </p>
-              <div className="mt-5">
-                <EnquiryForm productId={productId} productName={product.name} />
-              </div>
             </div>
           </div>
         </div>
