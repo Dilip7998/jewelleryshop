@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const dns = require("dns");
+const { lookup } = dns.promises;
 
 if (typeof dns.setDefaultResultOrder === "function") {
   dns.setDefaultResultOrder("ipv4first");
@@ -16,21 +17,35 @@ function getRecipients() {
     .filter((value, index, values) => value && values.indexOf(value) === index);
 }
 
-function createTransporter() {
+async function resolveIpv4Host(hostname) {
+  try {
+    const result = await lookup(hostname, { family: 4, verbatim: false });
+    return result.address;
+  } catch {
+    return hostname;
+  }
+}
+
+async function createTransporter() {
   if (!isSmtpConfigured()) return null;
 
   const port = Number(process.env.SMTP_PORT || 587);
   const secure =
     process.env.SMTP_SECURE === "true" ? true : process.env.SMTP_SECURE === "false" ? false : port === 465;
   const debug = process.env.SMTP_DEBUG === "true";
+  const smtpHost = process.env.SMTP_HOST;
+  const host = await resolveIpv4Host(smtpHost);
 
   return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
+    host,
     port,
     secure,
     family: 4,
     logger: debug,
     debug,
+    tls: {
+      servername: smtpHost
+    },
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
@@ -53,7 +68,7 @@ function describeSmtpError(error) {
 }
 
 async function sendEnquiryNotification(enquiry) {
-  const transporter = createTransporter();
+  const transporter = await createTransporter();
   if (!transporter) return false;
 
   const recipients = getRecipients();
