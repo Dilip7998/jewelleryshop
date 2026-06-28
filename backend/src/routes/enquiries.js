@@ -26,6 +26,18 @@ router.post("/", async (req, res, next) => {
       }
     } catch (error) {
       console.warn("Enquiry email notification failed:", error.message);
+      if (error.cause) {
+        console.warn("SMTP cause:", {
+          code: error.cause.code,
+          response: error.cause.response,
+          command: error.cause.command,
+          address: error.cause.address,
+          port: error.cause.port,
+          hostname: error.cause.hostname,
+          syscall: error.cause.syscall,
+          errno: error.cause.errno
+        });
+      }
     }
 
     return res.status(201).json({ success: true, notificationSent });
@@ -38,6 +50,18 @@ router.get("/", requireAdmin, async (req, res, next) => {
   try {
     const enquiries = await Enquiry.find().sort({ createdAt: -1 }).limit(100);
     return res.json(enquiries);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.delete("/:id", requireAdmin, async (req, res, next) => {
+  try {
+    const enquiry = await Enquiry.findByIdAndDelete(req.params.id);
+    if (!enquiry) {
+      return res.status(404).json({ message: "Enquiry not found" });
+    }
+    return res.json({ success: true });
   } catch (error) {
     return next(error);
   }

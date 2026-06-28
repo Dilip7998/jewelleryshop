@@ -6,6 +6,7 @@ import {
   FACEBOOK_URL,
   INSTAGRAM_URL,
   STORE_ADDRESS,
+  phoneCallUrl,
   X_URL,
   whatsappUrl
 } from "@/lib/constants";
@@ -86,6 +87,13 @@ export function Footer() {
             Visit
           </h3>
           <div className="mt-4 grid gap-3 text-sm text-pearl/74">
+            <a
+              href={phoneCallUrl}
+              className="flex gap-2 hover:text-gold-soft"
+            >
+              <Phone size={16} aria-hidden="true" />
+              Call Boutique
+            </a>
             <a
               href={whatsappUrl}
               target="_blank"

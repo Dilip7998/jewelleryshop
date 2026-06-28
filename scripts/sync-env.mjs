@@ -45,16 +45,10 @@ const frontendOrder = [
 ];
 
 const backend = {
-  ...parse("backend/.env.production.local"),
-  PORT: "5000",
-  NODE_ENV: "development",
-  MONGODB_URI: "mongodb://127.0.0.1:27017/jewellery_shop",
-  FRONTEND_URL: "http://localhost:3000"
+  ...parse("backend/.env.production.local")
 };
 const frontend = {
-  ...parse("frontend/.env.production.local"),
-  NEXT_PUBLIC_API_URL: "http://localhost:5000/api",
-  NEXT_PUBLIC_SITE_URL: "http://localhost:3000"
+  ...parse("frontend/.env.production.local")
 };
 
 write("backend/.env", backend, backendOrder);

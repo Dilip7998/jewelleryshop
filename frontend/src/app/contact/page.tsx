@@ -6,6 +6,7 @@ import {
   CONTACT_EMAIL,
   CONTACT_PHONE_DISPLAY,
   STORE_ADDRESS,
+  phoneCallUrl,
   whatsappUrl
 } from "@/lib/constants";
 
@@ -38,13 +39,20 @@ export default function ContactPage() {
               </h2>
               <div className="mt-6 grid gap-4 text-sm text-ink/70">
                 <a
+                  href={phoneCallUrl}
+                  className="flex min-w-0 gap-3 break-all hover:text-gold-deep"
+                >
+                  <Phone size={18} className="text-gold-deep" aria-hidden="true" />
+                  Call {CONTACT_PHONE_DISPLAY}
+                </a>
+                <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex min-w-0 gap-3 break-all hover:text-gold-deep"
                 >
                   <Phone size={18} className="text-gold-deep" aria-hidden="true" />
-                  {CONTACT_PHONE_DISPLAY}
+                  WhatsApp {CONTACT_PHONE_DISPLAY}
                 </a>
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
@@ -58,6 +66,31 @@ export default function ContactPage() {
                   {STORE_ADDRESS}
                 </span>
               </div>
+              <div className="mt-6 rounded-xl border border-gold/18 bg-ivory/60 p-4">
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold-deep">
+                  Call Section
+                </p>
+                <p className="mt-2 text-sm leading-6 text-ink/68">
+                  For quick availability checks, pricing, or a same-day appointment,
+                  call the boutique directly.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <a
+                    href={phoneCallUrl}
+                    className="inline-flex min-h-11 items-center justify-center rounded-full bg-charcoal px-5 text-sm font-bold text-gold-soft transition hover:bg-gold hover:text-charcoal"
+                  >
+                    Call Now
+                  </a>
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex min-h-11 items-center justify-center rounded-full border border-gold/30 px-5 text-sm font-bold text-charcoal transition hover:border-gold hover:bg-white"
+                  >
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
             </div>
             <div className="mt-6">
               <ContactMap />
@@ -65,9 +98,7 @@ export default function ContactPage() {
           </div>
 
           <div className="rounded-lg border border-gold/18 bg-white p-6 shadow-premium">
-            <h2 className="font-display text-3xl text-charcoal">
-              Enquiry Form
-            </h2>
+            <h2 className="font-display text-3xl text-charcoal">Enquiry Form</h2>
             <p className="mt-2 text-sm leading-6 text-ink/62">
               Share your contact details and preferred jewellery requirement.
             </p>

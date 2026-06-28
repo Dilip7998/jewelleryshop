@@ -106,7 +106,7 @@ The root `render.yaml` defines the frontend and API as two web services.
 Optional backend environment variables:
 
 - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` enable dashboard image uploads.
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `NOTIFY_EMAIL` enable enquiry email alerts.
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL`, and optional `NOTIFY_EMAIL` enable enquiry email alerts.
 
 Without Cloudinary, existing image URLs still display, but dashboard file uploads return a configuration error. Enquiries are stored in MongoDB even without SMTP.
 

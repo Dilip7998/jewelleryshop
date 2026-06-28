@@ -119,6 +119,13 @@ export async function fetchEnquiries(token: string) {
   );
 }
 
+export async function deleteEnquiry(id: string, token: string) {
+  return request<{ success: boolean }>(`/enquiries/${id}`, {
+    method: "DELETE",
+    token
+  });
+}
+
 export async function subscribeNewsletter(email: string) {
   return request<{ success: boolean }>("/newsletter", {
     method: "POST",

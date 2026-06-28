@@ -5,10 +5,12 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Edit3,
+  Mail,
   ImagePlus,
   Loader2,
   LogOut,
   Plus,
+  Phone,
   ShieldCheck,
   Trash2
 } from "lucide-react";
@@ -16,6 +18,7 @@ import {
   createCategory,
   createOffer,
   createProduct,
+  deleteEnquiry,
   deleteCategory,
   deleteOffer,
   deleteProduct,
@@ -336,6 +339,18 @@ export function AdminDashboard() {
       setNotice("Offer deleted.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Offer delete failed");
+    }
+  };
+
+  const removeEnquiry = async (id: string, name: string) => {
+    if (!token) return;
+    if (!window.confirm(`Delete the enquiry from ${name}?`)) return;
+    try {
+      await deleteEnquiry(id, token);
+      setEnquiries((current) => current.filter((item) => item._id !== id));
+      setNotice("Enquiry removed.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Enquiry delete failed");
     }
   };
 
@@ -887,13 +902,53 @@ export function AdminDashboard() {
                     key={enquiry._id}
                     className="rounded-md border border-gold/18 bg-ivory p-4"
                   >
-                    <p className="font-bold text-charcoal">{enquiry.name}</p>
-                    <p className="mt-1 text-sm text-ink/60">
-                      {enquiry.phone} · {enquiry.email}
-                    </p>
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-bold text-charcoal">{enquiry.name}</p>
+                        <p className="mt-1 text-sm text-ink/60">
+                          {enquiry.phone} · {enquiry.email}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => removeEnquiry(enquiry._id, enquiry.name)}
+                        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-red-200 text-red-700 transition hover:bg-red-50"
+                        aria-label={`Delete enquiry from ${enquiry.name}`}
+                        title={`Delete enquiry from ${enquiry.name}`}
+                      >
+                        <Trash2 size={15} aria-hidden="true" />
+                      </button>
+                    </div>
                     <p className="mt-3 text-sm leading-6 text-ink/72">
                       {enquiry.message}
                     </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      <a
+                        href={`tel:${enquiry.phone.replace(/\s+/g, "")}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-3 py-2 text-xs font-bold text-charcoal transition hover:bg-gold/10"
+                      >
+                        <Phone size={14} aria-hidden="true" />
+                        Call
+                      </a>
+                      <a
+                        href={`mailto:${enquiry.email}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-3 py-2 text-xs font-bold text-charcoal transition hover:bg-gold/10"
+                      >
+                        <Mail size={14} aria-hidden="true" />
+                        Email
+                      </a>
+                      {enquiry.phone ? (
+                        <a
+                          href={`https://wa.me/${enquiry.phone.replace(/[^0-9]/g, "")}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 rounded-full border border-gold/30 px-3 py-2 text-xs font-bold text-charcoal transition hover:bg-gold/10"
+                        >
+                          <Phone size={14} aria-hidden="true" />
+                          WhatsApp
+                        </a>
+                      ) : null}
+                    </div>
                     <p className="mt-3 text-xs uppercase tracking-[0.14em] text-ink/45">
                       {new Date(enquiry.createdAt).toLocaleString()}
                     </p>

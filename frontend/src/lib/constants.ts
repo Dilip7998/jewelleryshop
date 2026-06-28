@@ -17,6 +17,8 @@ export const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodeURICompon
   WHATSAPP_MESSAGE
 )}`;
 
+export const phoneCallUrl = `tel:+${PHONE_NUMBER}`;
+
 export const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-IN", {
     style: "currency",
