@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
+import { ArrowLeft, Phone } from "lucide-react";
 import { EnquiryForm } from "@/components/EnquiryForm";
 import { ProductDetailGallery } from "@/components/ProductDetailGallery";
+import { ProductWhatsAppShareButton } from "@/components/ProductWhatsAppShareButton";
 import { fetchProducts } from "@/lib/api";
 import {
   discountedPrice,
   formatCurrency,
+  SITE_URL,
   phoneCallUrl,
   whatsappUrl
 } from "@/lib/constants";
@@ -64,22 +66,19 @@ export default async function ProductDetailsPage({
   if (!product) notFound();
 
   const price = discountedPrice(product.originalPrice, product.discountPercent);
-  const productWhatsappUrl = whatsappUrl.replace(
-    /text=.*/,
-    `text=${encodeURIComponent(
-      [
-        "Hello, I want to know more about this product.",
-        `Product: ${product.name}`,
-        `Category: ${product.category}`,
-        `Price: ${formatCurrency(price)}`,
-        product.material ? `Material: ${product.material}` : "",
-        product.sku ? `SKU: ${product.sku}` : "",
-        `Link: ${productId ? `/catalog/${productId}` : "/catalog"}`
-      ]
-        .filter(Boolean)
-        .join("\n")
-    )}`
-  );
+  const productPageUrl = `${SITE_URL}/catalog/${productId}`;
+  const whatsappMessage = [
+    "Hello, I want to know more about this product.",
+    `Product: ${product.name}`,
+    `Category: ${product.category}`,
+    `Price: ${formatCurrency(price)}`,
+    product.material ? `Material: ${product.material}` : "",
+    product.sku ? `SKU: ${product.sku}` : "",
+    `Link: ${productPageUrl}`,
+    product.images[0] ? `Image: ${product.images[0]}` : ""
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return (
     <section className="bg-ivory py-6 sm:py-10 lg:py-12">
@@ -170,15 +169,12 @@ export default async function ProductDetailsPage({
                 <Phone size={16} aria-hidden="true" />
                 Call Boutique
               </a>
-              <a
-                href={productWhatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-12 items-center gap-2 rounded-full border border-gold/30 px-5 text-sm font-bold text-charcoal transition hover:bg-gold/10"
-              >
-                <MessageCircle size={16} aria-hidden="true" />
-                Enquire on WhatsApp
-              </a>
+              <ProductWhatsAppShareButton
+                title={product.name}
+                shareText={whatsappMessage}
+                shareUrl={productPageUrl}
+                imageUrl={product.images[0]}
+              />
             </div>
 
             <div className="mt-8 rounded-[1.25rem] border border-gold/18 bg-ivory p-4">

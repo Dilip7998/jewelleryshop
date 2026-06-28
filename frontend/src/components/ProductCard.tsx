@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle, Sparkles } from "lucide-react";
-import { discountedPrice, formatCurrency, whatsappUrl } from "@/lib/constants";
+import {
+  discountedPrice,
+  formatCurrency,
+  SITE_URL,
+  whatsappUrl
+} from "@/lib/constants";
 import type { Product } from "@/lib/types";
 
 type ProductCardProps = {
@@ -12,8 +17,18 @@ export function ProductCard({ product }: ProductCardProps) {
   const price = discountedPrice(product.originalPrice, product.discountPercent);
   const productId = product._id || product.id || encodeURIComponent(product.name.toLowerCase().replace(/\s+/g, "-"));
   const productHref = `/catalog/${productId}`;
+  const productUrl = `${SITE_URL}${productHref}`;
   const message = encodeURIComponent(
-    `Hello, I am interested in your jewellery collection. Product: ${product.name}`
+    [
+      "Hello, I want to know more about this product.",
+      `Product: ${product.name}`,
+      `Category: ${product.category}`,
+      `Price: ${formatCurrency(price)}`,
+      `Image: ${product.images[0] || ""}`,
+      `Link: ${productUrl}`
+    ]
+      .filter(Boolean)
+      .join("\n")
   );
   const productWhatsappUrl = whatsappUrl.replace(
     /text=.*/,
