@@ -32,6 +32,10 @@ export const metadata: Metadata = {
     locale: "en_IN"
   },
   alternates: { canonical: "/" },
+  icons: {
+    icon: "/brand/pooja-jewellers-logo.png",
+    apple: "/brand/pooja-jewellers-logo.png"
+  },
   robots: { index: true, follow: true }
 };
 

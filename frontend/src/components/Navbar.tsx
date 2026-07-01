@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Gem, Menu, Search, ShieldCheck, X } from "lucide-react";
+import { Menu, Search, ShieldCheck, X } from "lucide-react";
 import { BRAND_NAME } from "@/lib/constants";
 
 const links = [
@@ -20,9 +21,15 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-gold/20 bg-[#1c1408]/95 text-white shadow-premium backdrop-blur-xl">
       <div className="mx-auto flex w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 py-2.5 sm:px-6 sm:py-3 lg:px-8">
         <Link href="/" className="flex min-w-0 max-w-[calc(100%-3rem)] items-center gap-2.5" aria-label={BRAND_NAME}>
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gold/50 bg-white/5 text-gold-soft sm:h-11 sm:w-11">
-            <Gem size={22} aria-hidden="true" />
-          </span>
+          <Image
+            src="/brand/pooja-jewellers-logo.png"
+            alt="Pooja Jewellers logo"
+            width={1350}
+            height={1165}
+            priority
+            sizes="52px"
+            className="h-11 w-auto shrink-0 object-contain sm:h-12"
+          />
           <span className="min-w-0">
             <span className="block truncate font-display text-[1.35rem] font-bold leading-5 tracking-wide text-gold-soft drop-shadow-[0_1px_8px_rgba(242,208,113,0.45)] sm:text-2xl">
               {BRAND_NAME}

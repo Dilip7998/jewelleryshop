@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter } from "lucide-react";
 import {
@@ -16,7 +17,17 @@ export function Footer() {
     <footer className="bg-charcoal text-pearl">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr] lg:px-8">
         <div>
-          <h2 className="font-display text-3xl text-white">{BRAND_NAME}</h2>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/brand/pooja-jewellers-logo.png"
+              alt="Pooja Jewellers logo"
+              width={1350}
+              height={1165}
+              sizes="64px"
+              className="h-14 w-auto shrink-0 object-contain"
+            />
+            <h2 className="font-display text-3xl text-white">{BRAND_NAME}</h2>
+          </div>
           <p className="mt-4 max-w-sm text-sm leading-6 text-pearl/72">
             Premium gold, diamond, silver, and bridal jewellery with transparent
             pricing, curated offers, and direct boutique support.

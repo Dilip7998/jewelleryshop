@@ -9,6 +9,13 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     display: "standalone",
     background_color: "#fffaf0",
-    theme_color: "#1c1408"
+    theme_color: "#1c1408",
+    icons: [
+      {
+        src: "/brand/pooja-jewellers-logo.png",
+        sizes: "1350x1165",
+        type: "image/png"
+      }
+    ]
   };
 }
